@@ -9,6 +9,7 @@ export interface CalendarEvent {
   reminderMinutes: number; // 提前多少分钟提醒
   color?: string;
   isAllDay?: boolean;
+  tags?: string[]; // 标签数组，例如: ['work', 'important']
 }
 
 // 视图类型

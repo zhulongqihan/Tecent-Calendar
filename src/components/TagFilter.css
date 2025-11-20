@@ -1,0 +1,102 @@
+.tag-filter {
+  display: flex;
+  gap: 10px;
+  padding: 15px 20px;
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid #e0e0e0;
+  overflow-x: auto;
+  scrollbar-width: thin;
+  scrollbar-color: #ccc transparent;
+}
+
+.tag-filter::-webkit-scrollbar {
+  height: 4px;
+}
+
+.tag-filter::-webkit-scrollbar-thumb {
+  background: #ccc;
+  border-radius: 2px;
+}
+
+.tag-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 16px;
+  border: 2px solid;
+  border-radius: 20px;
+  background: transparent;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  white-space: nowrap;
+  transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  position: relative;
+  overflow: hidden;
+}
+
+.tag-btn::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  border-radius: 50%;
+  background: currentColor;
+  opacity: 0.2;
+  transform: translate(-50%, -50%);
+  transition: width 0.4s, height 0.4s;
+}
+
+.tag-btn:hover::before {
+  width: 200%;
+  height: 200%;
+}
+
+.tag-btn:hover {
+  transform: scale(1.05) translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.tag-btn.active {
+  transform: scale(1.05);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.tag-icon {
+  font-size: 18px;
+  line-height: 1;
+}
+
+.tag-name {
+  line-height: 1;
+}
+
+/* 深色模式 */
+body.dark-mode .tag-filter {
+  background: rgba(22, 33, 62, 0.7);
+  backdrop-filter: blur(10px);
+  border-bottom-color: #2a2a3e;
+}
+
+body.dark-mode .tag-btn {
+  background: transparent;
+}
+
+@media (max-width: 768px) {
+  .tag-filter {
+    padding: 12px 15px;
+    gap: 8px;
+  }
+  
+  .tag-btn {
+    padding: 6px 12px;
+    font-size: 13px;
+  }
+  
+  .tag-icon {
+    font-size: 16px;
+  }
+}

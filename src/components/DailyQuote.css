@@ -1,0 +1,97 @@
+.daily-quote {
+  background: linear-gradient(135deg, rgba(102, 126, 234, 0.85) 0%, rgba(118, 75, 162, 0.85) 100%);
+  color: white;
+  padding: 20px 24px;
+  margin: 0 20px 20px 20px;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+  position: relative;
+  animation: slideDown 0.5s ease;
+  backdrop-filter: blur(10px);
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.quote-close {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  background: rgba(255, 255, 255, 0.2);
+  border: none;
+  color: white;
+  font-size: 20px;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+}
+
+.quote-close:hover {
+  background: rgba(255, 255, 255, 0.3);
+  transform: rotate(90deg);
+}
+
+.quote-icon {
+  font-size: 32px;
+  margin-bottom: 12px;
+  animation: float 3s ease-in-out infinite;
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+.quote-text {
+  font-size: 16px;
+  line-height: 1.6;
+  margin: 0 0 12px 0;
+  font-weight: 500;
+  font-style: italic;
+}
+
+.quote-author {
+  font-size: 14px;
+  margin: 0;
+  text-align: right;
+  opacity: 0.9;
+}
+
+/* 深色模式 */
+body.dark-mode .daily-quote {
+  background: linear-gradient(135deg, rgba(67, 65, 144, 0.85) 0%, rgba(90, 61, 107, 0.85) 100%);
+  backdrop-filter: blur(10px);
+}
+
+@media (max-width: 768px) {
+  .daily-quote {
+    margin: 0 15px 15px 15px;
+    padding: 16px 20px;
+  }
+  
+  .quote-text {
+    font-size: 15px;
+  }
+  
+  .quote-author {
+    font-size: 13px;
+  }
+}

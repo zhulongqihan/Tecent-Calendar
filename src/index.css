@@ -5,6 +5,16 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  background: #0a0a1a;
+}
+
+body.dark-mode {
+  background: #0a0a1a;
+}
+
+/* 当粒子开启时使用深色背景 */
+body.particles-active {
+  background: #0a0a1a;
 }
 
 code {

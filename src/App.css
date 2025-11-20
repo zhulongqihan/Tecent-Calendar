@@ -6,7 +6,8 @@
 
 .App {
   min-height: 100vh;
-  background: #f5f5f5;
+  background: transparent;
+  position: relative;
 }
 
 .app-header {
@@ -25,8 +26,19 @@
   margin: 0;
 }
 
+.header-actions {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.focus-btn,
+.pomodoro-btn,
+.stats-btn,
+.particle-btn,
+.shortcut-btn,
 .settings-btn {
-  padding: 12px 24px;
+  padding: 12px 20px;
   background: rgba(255, 255, 255, 0.2);
   color: white;
   border: 1px solid rgba(255, 255, 255, 0.3);
@@ -37,8 +49,14 @@
   transition: all 0.2s;
 }
 
+.focus-btn:hover,
+.pomodoro-btn:hover,
+.stats-btn:hover,
+.particle-btn:hover,
+.shortcut-btn:hover,
 .settings-btn:hover {
   background: rgba(255, 255, 255, 0.3);
+  transform: translateY(-2px);
 }
 
 @media (max-width: 768px) {

@@ -1,0 +1,184 @@
+.theme-toggle {
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border: none;
+  font-size: 28px;
+  cursor: pointer;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+  transition: all 0.3s ease;
+  z-index: 999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.theme-toggle:hover {
+  transform: scale(1.1) rotate(15deg);
+  box-shadow: 0 6px 30px rgba(0, 0, 0, 0.4);
+}
+
+.theme-toggle:active {
+  transform: scale(0.95);
+}
+
+/* 深色模式样式 */
+body.dark-mode {
+  background: #1a1a2e;
+  color: #eee;
+}
+
+body.dark-mode .App {
+  background: #1a1a2e;
+}
+
+body.dark-mode .app-header {
+  background: linear-gradient(135deg, #434190 0%, #5a3d6b 100%);
+}
+
+body.dark-mode .rbc-calendar {
+  background: #16213e;
+  color: #eee;
+}
+
+body.dark-mode .rbc-header {
+  background: #0f1419;
+  color: #aaa;
+  border-bottom-color: #2a2a3e;
+}
+
+body.dark-mode .rbc-day-bg {
+  background: #16213e;
+  border-color: #2a2a3e;
+}
+
+body.dark-mode .rbc-off-range-bg {
+  background: #0f1419;
+}
+
+body.dark-mode .rbc-today {
+  background: #1e3a5f;
+}
+
+body.dark-mode .custom-date-header .date-number {
+  color: #eee;
+}
+
+body.dark-mode .custom-date-header .lunar-text {
+  color: #999;
+}
+
+body.dark-mode .rbc-toolbar {
+  background: #16213e;
+  border-bottom-color: #2a2a3e;
+}
+
+body.dark-mode .rbc-toolbar-label {
+  color: #eee;
+}
+
+body.dark-mode .rbc-toolbar button {
+  background: #0f1419;
+  color: #eee;
+  border-color: #2a2a3e;
+}
+
+body.dark-mode .rbc-toolbar button:hover {
+  background: #1e3a5f;
+}
+
+body.dark-mode .rbc-toolbar button.rbc-active {
+  background: #667eea;
+  color: white;
+}
+
+body.dark-mode .calendar-toolbar {
+  background: #16213e;
+  border-bottom-color: #2a2a3e;
+}
+
+body.dark-mode .event-editor-overlay {
+  background: rgba(0, 0, 0, 0.8);
+}
+
+body.dark-mode .event-editor {
+  background: #16213e;
+  color: #eee;
+}
+
+body.dark-mode .editor-header {
+  border-bottom-color: #2a2a3e;
+}
+
+body.dark-mode .editor-header h2 {
+  color: #eee;
+}
+
+body.dark-mode .close-btn {
+  color: #999;
+}
+
+body.dark-mode .close-btn:hover {
+  color: #eee;
+}
+
+body.dark-mode .form-group label {
+  color: #eee;
+}
+
+body.dark-mode .form-group input,
+body.dark-mode .form-group select,
+body.dark-mode .form-group textarea {
+  background: #0f1419;
+  color: #eee;
+  border-color: #2a2a3e;
+}
+
+body.dark-mode .editor-actions {
+  border-top-color: #2a2a3e;
+}
+
+body.dark-mode .cancel-btn {
+  background: #0f1419;
+  color: #999;
+}
+
+body.dark-mode .cancel-btn:hover {
+  background: #1e3a5f;
+}
+
+body.dark-mode .settings-panel {
+  background: #16213e;
+  color: #eee;
+}
+
+body.dark-mode .settings-header {
+  background: #16213e;
+  border-bottom-color: #2a2a3e;
+}
+
+body.dark-mode .settings-header h2 {
+  color: #eee;
+}
+
+body.dark-mode .settings-section h3 {
+  color: #eee;
+}
+
+body.dark-mode .setting-item {
+  border-bottom-color: #2a2a3e;
+}
+
+body.dark-mode .setting-desc {
+  color: #999;
+}
+
+body.dark-mode .url-input {
+  background: #0f1419;
+  color: #eee;
+  border-color: #2a2a3e;
+}

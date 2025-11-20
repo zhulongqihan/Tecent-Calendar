@@ -15,13 +15,16 @@ interface CalendarViewProps {
   onSelectEvent: (event: CalendarEvent) => void;
   onSelectSlot: (start: Date, end: Date) => void;
   refreshTrigger: number;
+  selectedTag?: string;
 }
 
 export const CalendarView: React.FC<CalendarViewProps> = ({
   onSelectEvent,
   onSelectSlot,
   refreshTrigger,
+  selectedTag = 'all',
 }) => {
+  const [allEvents, setAllEvents] = useState<CalendarEvent[]>([]);
   const [events, setEvents] = useState<CalendarEvent[]>([]);
   const [view, setView] = useState<View>('month');
   const [date, setDate] = useState(new Date());
@@ -29,9 +32,27 @@ export const CalendarView: React.FC<CalendarViewProps> = ({
 
   // 加载事件
   const loadEvents = useCallback(async () => {
-    const allEvents = await StorageService.getAllEvents();
-    setEvents(allEvents);
+    const loadedEvents = await StorageService.getAllEvents();
+    setAllEvents(loadedEvents);
   }, []);
+
+  // 根据标签过滤事件
+  useEffect(() => {
+    if (selectedTag === 'all') {
+      setEvents(allEvents);
+    } else {
+      const filtered = allEvents.filter(event => {
+        // 优先使用tags字段
+        if (event.tags && event.tags.includes(selectedTag)) {
+          return true;
+        }
+        // 兼容旧方式：关键词匹配
+        return event.description?.toLowerCase().includes(`#${selectedTag}`) ||
+               event.title?.toLowerCase().includes(selectedTag);
+      });
+      setEvents(filtered);
+    }
+  }, [selectedTag, allEvents]);
 
   useEffect(() => {
     loadEvents();

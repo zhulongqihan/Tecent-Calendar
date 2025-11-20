@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { CalendarEvent, REMINDER_OPTIONS } from '../types';
 import { StorageService } from '../services/StorageService';
+import { TAGS } from './TagFilter';
 import './EventEditor.css';
 
 interface EventEditorProps {
@@ -28,6 +29,7 @@ export const EventEditor: React.FC<EventEditorProps> = ({
     endTime: '',
     reminderMinutes: 0,
     color: '#3788d8',
+    tags: [] as string[],
   });
 
   useEffect(() => {
@@ -43,6 +45,7 @@ export const EventEditor: React.FC<EventEditorProps> = ({
         endTime: formatTimeForInput(event.endDate),
         reminderMinutes: event.reminderMinutes,
         color: event.color || '#3788d8',
+        tags: event.tags || [],
       });
     } else if (initialStart && initialEnd) {
       // 新建模式
@@ -94,6 +97,7 @@ export const EventEditor: React.FC<EventEditorProps> = ({
       endDate,
       reminderMinutes: formData.reminderMinutes,
       color: formData.color,
+      tags: formData.tags,
     };
 
     try {
@@ -241,6 +245,29 @@ export const EventEditor: React.FC<EventEditorProps> = ({
                 </option>
               ))}
             </select>
+          </div>
+
+          <div className="form-group">
+            <label>标签</label>
+            <div className="tag-selector">
+              {TAGS.filter(tag => tag.id !== 'all').map(tag => (
+                <label key={tag.id} className="tag-checkbox">
+                  <input
+                    type="checkbox"
+                    checked={formData.tags.includes(tag.id)}
+                    onChange={(e) => {
+                      const newTags = e.target.checked
+                        ? [...formData.tags, tag.id]
+                        : formData.tags.filter(t => t !== tag.id);
+                      handleChange('tags', newTags);
+                    }}
+                  />
+                  <span className="tag-label" style={{ borderColor: tag.color, color: tag.color }}>
+                    {tag.icon} {tag.name}
+                  </span>
+                </label>
+              ))}
+            </div>
           </div>
 
           <div className="form-group">
