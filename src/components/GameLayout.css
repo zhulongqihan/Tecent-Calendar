@@ -1,0 +1,107 @@
+.game-layout {
+  display: grid;
+  grid-template-columns: 280px 1fr 300px;
+  grid-template-rows: calc(100vh - 70px); /* 减去header高度 */
+  gap: 20px;
+  padding: 20px;
+  max-width: 1920px;
+  margin: 0 auto;
+  height: calc(100vh - 70px);
+  overflow: hidden;
+}
+
+.layout-column {
+  height: 100%;
+  overflow-y: auto;
+  /* 隐藏滚动条但保留功能 */
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.layout-column::-webkit-scrollbar {
+  display: none;
+}
+
+.left-column {
+  animation: slideRight 0.5s ease;
+}
+
+.right-column {
+  animation: slideLeft 0.5s ease;
+}
+
+.main-column {
+  animation: fadeIn 0.8s ease;
+  display: flex;
+  flex-direction: column;
+}
+
+.main-hud-border {
+  flex: 1;
+  border: 1px solid var(--cyber-primary);
+  background: rgba(0, 0, 0, 0.4);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+/* 战术角标装饰 */
+.main-hud-border::before,
+.main-hud-border::after {
+  content: '';
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  border: 2px solid var(--cyber-primary);
+  transition: all 0.3s ease;
+}
+
+.main-hud-border::before {
+  top: -1px;
+  left: -1px;
+  border-right: none;
+  border-bottom: none;
+}
+
+.main-hud-border::after {
+  bottom: -1px;
+  right: -1px;
+  border-left: none;
+  border-top: none;
+}
+
+/* 响应式适配 */
+@media (max-width: 1200px) {
+  .game-layout {
+    grid-template-columns: 250px 1fr;
+  }
+  .right-column {
+    display: none; /* 平板模式隐藏右栏或移动到其他位置 */
+  }
+}
+
+@media (max-width: 768px) {
+  .game-layout {
+    grid-template-columns: 1fr;
+    padding: 10px;
+  }
+  .left-column {
+    display: none; /* 手机模式隐藏左栏，改为抽屉式导航 */
+  }
+}
+
+@keyframes slideRight {
+  from { opacity: 0; transform: translateX(-50px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes slideLeft {
+  from { opacity: 0; transform: translateX(50px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}

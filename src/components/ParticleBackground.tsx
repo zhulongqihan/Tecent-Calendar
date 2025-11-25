@@ -43,19 +43,21 @@ export const ParticleBackground: React.FC = () => {
 
       draw() {
         if (!ctx) return;
-        // 添加发光效果
-        ctx.shadowBlur = 20;
-        ctx.shadowColor = `rgba(102, 126, 234, ${this.opacity})`;
-        ctx.fillStyle = `rgba(150, 180, 255, ${this.opacity})`;
-        ctx.beginPath();
-        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-        ctx.fill();
+        // Cyber Style: Rectangles instead of circles
+        ctx.shadowBlur = 15;
+        ctx.shadowColor = `rgba(0, 243, 255, ${this.opacity})`; // Neon Cyan Glow
+        ctx.fillStyle = `rgba(0, 243, 255, ${this.opacity})`;
+        
+        // Draw tiny squares
+        const size = this.size / 2; // Make them a bit smaller/sharper
+        ctx.fillRect(this.x, this.y, size, size);
+        
         ctx.shadowBlur = 0;
       }
     }
 
     const particles: Particle[] = [];
-    const particleCount = 100;
+    const particleCount = 80; // Reduce count slightly for cleaner look
 
     for (let i = 0; i < particleCount; i++) {
       particles.push(new Particle());
@@ -69,12 +71,12 @@ export const ParticleBackground: React.FC = () => {
           const dy = particles[i].y - particles[j].y;
           const distance = Math.sqrt(dx * dx + dy * dy);
 
-          if (distance < 180) {
-            const opacity = (1 - distance / 180) * 0.8;
-            ctx.strokeStyle = `rgba(150, 180, 255, ${opacity})`;
-            ctx.shadowBlur = 10;
-            ctx.shadowColor = `rgba(102, 126, 234, ${opacity})`;
-            ctx.lineWidth = 2.5;
+          if (distance < 150) {
+            const opacity = (1 - distance / 150) * 0.5;
+            ctx.strokeStyle = `rgba(0, 243, 255, ${opacity})`;
+            ctx.shadowBlur = 5;
+            ctx.shadowColor = `rgba(0, 243, 255, ${opacity})`;
+            ctx.lineWidth = 1;
             ctx.beginPath();
             ctx.moveTo(particles[i].x, particles[i].y);
             ctx.lineTo(particles[j].x, particles[j].y);

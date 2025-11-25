@@ -80,8 +80,18 @@ export const EventEditor: React.FC<EventEditorProps> = ({
       return;
     }
 
+    if (!formData.startDate || !formData.startTime || !formData.endDate || !formData.endTime) {
+      alert('请完整填写日期和时间');
+      return;
+    }
+
     const startDate = new Date(`${formData.startDate}T${formData.startTime}`);
     const endDate = new Date(`${formData.endDate}T${formData.endTime}`);
+
+    if (isNaN(startDate.getTime()) || isNaN(endDate.getTime())) {
+      alert('日期格式无效');
+      return;
+    }
 
     if (endDate <= startDate) {
       alert('结束时间必须晚于开始时间');
@@ -178,7 +188,9 @@ export const EventEditor: React.FC<EventEditorProps> = ({
                 type="date"
                 value={formData.startDate}
                 onChange={(e) => handleChange('startDate', e.target.value)}
+                onClick={(e) => e.currentTarget.showPicker()}
                 required
+                style={{ cursor: 'pointer' }}
               />
             </div>
             <div className="form-group">
@@ -187,7 +199,9 @@ export const EventEditor: React.FC<EventEditorProps> = ({
                 type="time"
                 value={formData.startTime}
                 onChange={(e) => handleChange('startTime', e.target.value)}
+                onClick={(e) => e.currentTarget.showPicker()}
                 required
+                style={{ cursor: 'pointer' }}
               />
             </div>
           </div>
@@ -199,7 +213,9 @@ export const EventEditor: React.FC<EventEditorProps> = ({
                 type="date"
                 value={formData.endDate}
                 onChange={(e) => handleChange('endDate', e.target.value)}
+                onClick={(e) => e.currentTarget.showPicker()}
                 required
+                style={{ cursor: 'pointer' }}
               />
             </div>
             <div className="form-group">
@@ -208,7 +224,9 @@ export const EventEditor: React.FC<EventEditorProps> = ({
                 type="time"
                 value={formData.endTime}
                 onChange={(e) => handleChange('endTime', e.target.value)}
+                onClick={(e) => e.currentTarget.showPicker()}
                 required
+                style={{ cursor: 'pointer' }}
               />
             </div>
           </div>

@@ -1,92 +1,60 @@
 .calendar-container {
   padding: 0;
-  background: rgba(245, 245, 245, 0.65);
-  backdrop-filter: blur(10px);
-  height: calc(100vh - 185px);
+  background: rgba(0, 0, 0, 0.6);
+  /* 使用 flex: 1 自动填充剩余空间 */
+  flex: 1;
+  height: auto; /* 覆盖之前的 height: 100% */
+  min-height: 0; /* 关键：防止 flex item 在 overflow 时不收缩 */
+  width: 100%;
   display: flex;
   flex-direction: column;
   animation: fadeInUp 0.5s ease;
   position: relative;
+  border: none;
+  margin: 0;
+  box-shadow: none;
 }
 
-body.dark-mode .calendar-container,
-body.particles-active .calendar-container {
-  background: rgba(15, 20, 35, 0.6);
-  backdrop-filter: blur(10px);
+/* 移除之前添加的容器四角装饰，避免重复 */
+.calendar-container::before, .calendar-container::after {
+  display: none;
 }
 
 @keyframes fadeInUp {
-  from {
-    opacity: 0;
-    transform: translateY(30px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+  from { opacity: 0; transform: translateY(30px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
 .calendar-toolbar {
   padding: 15px 20px;
-  background: rgba(255, 255, 255, 0.7);
-  backdrop-filter: blur(10px);
+  background: rgba(0, 0, 0, 0.8);
+  border-bottom: 1px solid var(--cyber-primary);
   display: flex;
   gap: 10px;
   justify-content: flex-end;
-  border-bottom: 1px solid #e0e0e0;
 }
 
-body.dark-mode .calendar-toolbar {
-  background: rgba(22, 33, 62, 0.7);
-  backdrop-filter: blur(10px);
-  border-bottom-color: #2a2a3e;
-}
 
 .calendar-toolbar button {
-  padding: 12px 24px;
-  background: #667eea;
-  color: white;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-  font-size: 15px;
-  font-weight: 500;
-  transition: all 0.2s;
+  /* 复用 index.css 中的按钮样式 */
+  position: relative;
 }
 
-.calendar-toolbar button:hover {
-  background: #5568d3;
-  transform: translateY(-1px);
-}
-
-/* 优化日历样式 */
+/* 优化日历样式 - 战术网格 */
 .rbc-calendar {
-  background: rgba(255, 255, 255, 0.7);
-  backdrop-filter: blur(10px);
+  background: transparent;
   flex: 1;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
-}
-
-body.dark-mode .rbc-calendar,
-body.particles-active .rbc-calendar {
-  background: rgba(15, 20, 35, 0.5);
-  backdrop-filter: blur(10px);
+  font-family: 'Courier New', monospace;
 }
 
 .rbc-header {
   padding: 15px 0;
-  font-weight: 600;
-  color: #333;
+  font-weight: bold;
+  color: var(--cyber-primary);
   font-size: 16px;
-  border-bottom: 2px solid #e0e0e0;
-  background: rgba(250, 250, 250, 0.5);
-}
-
-body.dark-mode .rbc-header,
-body.particles-active .rbc-header {
-  background: rgba(15, 20, 25, 0.4);
-  color: #aaa;
-  border-bottom-color: rgba(150, 180, 255, 0.2);
+  border-bottom: 1px solid var(--cyber-primary);
+  background: rgba(0, 243, 255, 0.05);
+  text-shadow: 0 0 5px var(--cyber-primary);
 }
 
 .rbc-month-view {
@@ -98,199 +66,159 @@ body.particles-active .rbc-header {
   min-height: 120px;
 }
 
-.rbc-month-view .rbc-row {
-  min-height: 120px;
-}
-
 .rbc-day-bg {
-  border: 1px solid rgba(240, 240, 240, 0.5);
+  border: 1px solid rgba(0, 243, 255, 0.1);
   transition: all 0.2s ease;
-  background: rgba(255, 255, 255, 0.3);
+  background: transparent;
 }
 
 .rbc-day-bg:hover {
-  background-color: rgba(240, 247, 255, 0.6);
-  border-color: #d0e7ff;
+  background-color: rgba(0, 243, 255, 0.05);
+  border-color: var(--cyber-primary);
   cursor: pointer;
+  box-shadow: inset 0 0 20px rgba(0, 243, 255, 0.1);
 }
 
 .rbc-off-range-bg {
-  background-color: rgba(250, 250, 250, 0.3);
+  background: rgba(0, 0, 0, 0.4);
+  /* 斜线纹理 */
+  background-image: repeating-linear-gradient(45deg, transparent, transparent 10px, rgba(255, 255, 255, 0.03) 10px, rgba(255, 255, 255, 0.03) 20px);
 }
 
 .rbc-today {
-  background-color: rgba(232, 240, 254, 0.6);
-}
-
-body.dark-mode .rbc-day-bg {
-  background: rgba(22, 33, 62, 0.3);
-  border-color: rgba(42, 42, 62, 0.5);
-}
-
-body.dark-mode .rbc-today {
-  background-color: rgba(30, 58, 95, 0.6);
-}
-
-.rbc-date-cell {
-  padding: 4px;
-  text-align: center;
+  background-color: rgba(0, 243, 255, 0.1);
+  box-shadow: inset 0 0 30px rgba(0, 243, 255, 0.2);
 }
 
 /* 自定义日期头部样式 */
 .custom-date-header {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  gap: 4px;
-  padding: 8px 4px;
+  align-items: flex-end; /* 放到右上角，像战术标号 */
+  gap: 2px;
+  padding: 8px;
 }
 
 .custom-date-header .date-number {
-  font-size: 20px;
-  font-weight: 600;
-  color: #333;
-  line-height: 1;
+  font-size: 22px;
+  font-weight: bold;
+  color: var(--cyber-text-main);
+  text-shadow: 0 0 5px var(--cyber-text-main);
 }
 
 .custom-date-header .lunar-text {
-  font-size: 14px;
-  color: #666;
-  font-weight: 500;
-  line-height: 1.2;
+  font-size: 12px;
+  color: var(--cyber-text-dim);
+  font-family: 'Segoe UI', sans-serif;
 }
 
-/* 粒子模式下的日期颜色 */
-body.particles-active .custom-date-header .date-number {
-  color: #ccc;
-}
-
-body.particles-active .custom-date-header .lunar-text {
-  color: #888;
-}
-
-body.particles-active .rbc-off-range .custom-date-header .date-number {
-  color: #555;
-}
-
-body.particles-active .rbc-off-range .custom-date-header .lunar-text {
-  color: #444;
-}
-
-/* 今日样式 */
+/* 今日高亮 - 方块化 */
 .rbc-today .custom-date-header .date-number {
-  background: #1a73e8;
-  color: white;
-  width: 34px;
-  height: 34px;
-  border-radius: 50%;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 18px;
+  background: var(--cyber-primary);
+  color: black;
+  padding: 2px 8px;
+  clip-path: polygon(10% 0, 100% 0, 100% 100%, 0 100%, 0 10%);
+  text-shadow: none;
 }
 
 .rbc-today .custom-date-header .lunar-text {
-  color: #1a73e8;
-  font-weight: 600;
+  color: var(--cyber-primary);
 }
 
-/* 非当月日期样式 */
+/* 非当月日期 */
 .rbc-off-range .custom-date-header .date-number {
-  color: #ccc;
+  color: rgba(255, 255, 255, 0.2);
+  text-shadow: none;
 }
 
 .rbc-off-range .custom-date-header .lunar-text {
-  color: #ddd;
+  color: rgba(255, 255, 255, 0.1);
 }
 
-/* 事件样式 */
+/* 事件样式 - 能量条风格 */
 .rbc-event {
   padding: 4px 8px;
-  font-size: 13px;
-  border-radius: 4px;
-  border: none !important;
+  font-size: 12px;
+  border-radius: 2px;
+  /* 改为半透明主题色背景，更明显 */
+  background: rgba(0, 243, 255, 0.15) !important;
+  border: 1px solid var(--cyber-primary);
+  border-left: 4px solid var(--cyber-primary);
   transition: all 0.2s ease;
-  cursor: pointer;
-}
-
-.rbc-event:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  margin: 2px 0;
+  /* 确保在网格之上 */
+  position: relative;
   z-index: 10;
 }
 
-.rbc-event-label {
-  font-size: 12px;
-}
-
 .rbc-event-content {
-  font-weight: 500;
+  /* 强制白色文字，确保可读性 */
+  color: #fff !important;
+  font-family: 'Segoe UI', sans-serif;
+  letter-spacing: 0.5px;
+  font-weight: bold;
+  text-shadow: 0 0 2px black;
 }
 
-/* 工具栏样式 */
+.rbc-event:hover {
+  transform: translateX(5px) scale(1.02);
+  background: var(--cyber-primary) !important;
+  box-shadow: 0 0 15px var(--cyber-primary);
+  z-index: 20;
+}
+
+.rbc-event:hover .rbc-event-content {
+  color: black;
+  font-weight: bold;
+}
+
+/* 工具栏样式重置 */
 .rbc-toolbar {
   padding: 15px 20px;
-  background: white;
-  border-bottom: 1px solid #e0e0e0;
+  background: transparent;
+  border-bottom: 1px solid var(--cyber-primary);
   display: flex;
   justify-content: space-between;
   align-items: center;
+  margin-bottom: 20px;
 }
 
 .rbc-toolbar-label {
-  font-size: 20px;
-  font-weight: 600;
-  color: #333;
+  font-size: 24px;
+  font-weight: bold;
+  color: var(--cyber-primary);
+  text-shadow: 0 0 10px var(--cyber-primary);
+  letter-spacing: 4px;
 }
 
 .rbc-toolbar button {
-  padding: 10px 18px;
-  background: white;
-  border: 1px solid #ddd;
-  border-radius: 6px;
-  color: #333;
-  font-size: 15px;
-  cursor: pointer;
-  transition: all 0.2s;
-  font-weight: 500;
+  color: var(--cyber-primary);
+  border: 1px solid var(--cyber-primary);
+  border-radius: 0;
+  background: transparent;
+  font-family: 'Courier New', monospace;
 }
 
 .rbc-toolbar button:hover {
-  background: #f5f5f5;
-  border-color: #999;
+  background: var(--cyber-primary);
+  color: black;
+  box-shadow: 0 0 15px var(--cyber-primary);
 }
 
 .rbc-toolbar button.rbc-active {
-  background: #667eea;
-  color: white;
-  border-color: #667eea;
+  background: var(--cyber-primary);
+  color: black;
+  box-shadow: 0 0 10px var(--cyber-primary);
 }
 
 /* 响应式 */
 @media (max-width: 768px) {
   .calendar-container {
-    height: calc(100vh - 56px);
+    margin: 10px;
+    height: calc(100vh - 140px);
   }
   
-  .rbc-month-row {
-    min-height: 90px;
-  }
-  
-  .rbc-month-view .rbc-row {
-    min-height: 90px;
-  }
-  
-  .custom-date-header .date-number {
-    font-size: 16px;
-  }
-  
-  .custom-date-header .lunar-text {
-    font-size: 12px;
-  }
-  
-  .rbc-today .custom-date-header .date-number {
-    width: 30px;
-    height: 30px;
-    font-size: 16px;
+  .rbc-toolbar-label {
+    font-size: 18px;
   }
 }

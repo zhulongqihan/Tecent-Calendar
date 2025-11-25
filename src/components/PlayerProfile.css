@@ -1,0 +1,115 @@
+.player-profile {
+  padding: 20px;
+  margin-bottom: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border: 1px solid var(--cyber-primary);
+  background: rgba(10, 10, 20, 0.8);
+}
+
+.avatar-container {
+  position: relative;
+  width: 100px;
+  height: 100px;
+  margin-bottom: 15px;
+}
+
+.avatar-img {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  border: 2px solid var(--cyber-primary);
+  box-shadow: 0 0 15px var(--cyber-primary);
+  object-fit: cover;
+}
+
+.level-badge {
+  position: absolute;
+  bottom: -5px;
+  right: -5px;
+  background: var(--cyber-danger);
+  color: white;
+  padding: 2px 8px;
+  font-weight: bold;
+  font-family: 'Courier New', monospace;
+  font-size: 14px;
+  clip-path: polygon(10% 0, 100% 0, 100% 100%, 0 100%, 0 10%);
+  box-shadow: 0 0 10px var(--cyber-danger);
+}
+
+.player-info {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.player-name {
+  margin: 0;
+  color: var(--cyber-primary);
+  font-size: 18px;
+  letter-spacing: 2px;
+  text-shadow: 0 0 5px var(--cyber-primary);
+}
+
+.player-title {
+  color: var(--cyber-text-dim);
+  font-size: 12px;
+  text-transform: uppercase;
+  margin-top: 4px;
+}
+
+.xp-container {
+  width: 100%;
+  margin-bottom: 20px;
+}
+
+.xp-info {
+  display: flex;
+  justify-content: space-between;
+  font-size: 12px;
+  color: var(--cyber-text-dim);
+  margin-bottom: 4px;
+  font-family: 'Courier New', monospace;
+}
+
+.xp-bar-bg {
+  height: 8px;
+  background: rgba(0, 0, 0, 0.5);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  position: relative;
+  overflow: hidden;
+}
+
+.xp-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--cyber-primary), var(--cyber-secondary));
+  box-shadow: 0 0 10px var(--cyber-primary);
+  transition: width 0.5s ease;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 10px;
+  width: 100%;
+}
+
+.stat-box {
+  background: rgba(0, 243, 255, 0.05);
+  padding: 8px 4px;
+  text-align: center;
+  border: 1px solid rgba(0, 243, 255, 0.2);
+}
+
+.stat-label {
+  font-size: 10px;
+  color: var(--cyber-text-dim);
+  margin-bottom: 4px;
+}
+
+.stat-value {
+  font-size: 14px;
+  font-weight: bold;
+  color: var(--cyber-text-main);
+  font-family: 'Courier New', monospace;
+}

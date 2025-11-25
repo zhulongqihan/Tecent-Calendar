@@ -4,7 +4,7 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(0, 0, 0, 0.7);
+  background: rgba(0, 0, 0, 0.9);
   backdrop-filter: blur(8px);
   display: flex;
   justify-content: center;
@@ -14,33 +14,40 @@
 }
 
 .pomodoro-panel {
-  background: white;
-  border-radius: 20px;
+  background: rgba(10, 10, 20, 0.95);
+  border: 1px solid var(--cyber-danger);
+  border-radius: 0;
   width: 90%;
   max-width: 450px;
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+  box-shadow: 0 0 30px rgba(255, 0, 60, 0.3);
   animation: bounceIn 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
   overflow: hidden;
+  position: relative;
 }
 
+/* 战术边角 */
+.pomodoro-panel::before, .pomodoro-panel::after {
+  content: '';
+  position: absolute;
+  width: 15px;
+  height: 15px;
+  border: 2px solid var(--cyber-danger);
+  z-index: 2;
+}
+.pomodoro-panel::before { top: 0; right: 0; border-left: none; border-bottom: none; }
+.pomodoro-panel::after { bottom: 0; left: 0; border-right: none; border-top: none; }
+
 @keyframes bounceIn {
-  0% {
-    transform: scale(0.3);
-    opacity: 0;
-  }
-  50% {
-    transform: scale(1.05);
-  }
-  100% {
-    transform: scale(1);
-    opacity: 1;
-  }
+  0% { transform: scale(0.3); opacity: 0; }
+  50% { transform: scale(1.05); }
+  100% { transform: scale(1); opacity: 1; }
 }
 
 .pomodoro-header {
-  padding: 24px 28px;
-  background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-  color: white;
+  padding: 20px 28px;
+  background: rgba(255, 0, 60, 0.1);
+  border-bottom: 1px solid var(--cyber-danger);
+  color: var(--cyber-danger);
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -49,12 +56,16 @@
 .pomodoro-header h3 {
   margin: 0;
   font-size: 22px;
-  font-weight: 600;
+  font-weight: bold;
+  letter-spacing: 2px;
+  text-shadow: 0 0 10px var(--cyber-danger);
 }
 
 .pomodoro-content {
   padding: 40px 28px;
   text-align: center;
+  background: rgba(0, 0, 0, 0.5);
+  background-image: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(255, 0, 60, 0.05) 2px, rgba(255, 0, 60, 0.05) 4px);
 }
 
 .mode-indicator {
@@ -65,18 +76,21 @@
 }
 
 .mode-indicator span {
-  padding: 10px 20px;
-  border-radius: 20px;
-  font-size: 15px;
-  font-weight: 600;
-  color: #999;
+  padding: 8px 16px;
+  border: 1px solid transparent;
+  font-size: 14px;
+  font-weight: bold;
+  color: var(--cyber-text-dim);
   transition: all 0.3s;
+  text-transform: uppercase;
+  letter-spacing: 1px;
 }
 
 .mode-indicator span.active {
-  background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-  color: white;
-  transform: scale(1.1);
+  border-color: var(--cyber-danger);
+  color: var(--cyber-danger);
+  background: rgba(255, 0, 60, 0.1);
+  box-shadow: 0 0 15px rgba(255, 0, 60, 0.2);
 }
 
 .timer-display {
@@ -84,6 +98,8 @@
   width: 260px;
   height: 260px;
   margin: 0 auto 40px;
+  border-radius: 50%;
+  box-shadow: 0 0 30px rgba(255, 0, 60, 0.1);
 }
 
 .progress-ring {
@@ -92,16 +108,17 @@
 
 .progress-ring-bg {
   fill: none;
-  stroke: #f0f0f0;
-  stroke-width: 12;
+  stroke: rgba(255, 0, 60, 0.1);
+  stroke-width: 8;
 }
 
 .progress-ring-progress {
   fill: none;
-  stroke: url(#gradient);
-  stroke-width: 12;
-  stroke-linecap: round;
+  stroke: var(--cyber-danger);
+  stroke-width: 10;
+  stroke-linecap: square; /* 科技感 */
   transition: stroke-dashoffset 1s linear;
+  filter: drop-shadow(0 0 5px var(--cyber-danger));
 }
 
 .timer-text {
@@ -115,17 +132,19 @@
 .time {
   font-size: 56px;
   font-weight: 700;
-  color: #333;
+  color: var(--cyber-danger);
   font-family: 'Courier New', monospace;
   line-height: 1;
   margin-bottom: 10px;
-  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  text-shadow: 0 0 15px var(--cyber-danger);
 }
 
 .timer-label {
-  font-size: 16px;
-  color: #999;
-  font-weight: 500;
+  font-size: 14px;
+  color: var(--cyber-danger);
+  font-weight: bold;
+  letter-spacing: 2px;
+  opacity: 0.8;
 }
 
 .timer-controls {
@@ -136,41 +155,45 @@
 }
 
 .control-btn {
-  padding: 14px 28px;
-  border: none;
-  border-radius: 30px;
+  padding: 12px 28px;
+  border: 1px solid var(--cyber-danger);
+  border-radius: 0;
   font-size: 16px;
-  font-weight: 600;
+  font-weight: bold;
   cursor: pointer;
   transition: all 0.3s;
-  background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-  color: white;
-  box-shadow: 0 4px 15px rgba(245, 87, 108, 0.3);
+  background: transparent;
+  color: var(--cyber-danger);
+  text-transform: uppercase;
+  clip-path: polygon(10px 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%, 0 10px);
 }
 
 .control-btn:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(245, 87, 108, 0.4);
+  background: var(--cyber-danger);
+  color: black;
+  box-shadow: 0 0 20px var(--cyber-danger);
 }
 
 .control-btn:active {
-  transform: translateY(0);
+  transform: translateY(2px);
 }
 
 .control-btn.secondary {
-  background: #f5f5f5;
-  color: #666;
+  border-color: var(--cyber-text-dim);
+  color: var(--cyber-text-dim);
   box-shadow: none;
 }
 
 .control-btn.secondary:hover {
-  background: #e0e0e0;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  border-color: var(--cyber-text-main);
+  color: var(--cyber-text-main);
+  background: transparent;
+  box-shadow: 0 0 10px var(--cyber-text-main);
 }
 
 .pomodoro-stats {
   padding-top: 20px;
-  border-top: 1px solid #e0e0e0;
+  border-top: 1px solid rgba(255, 0, 60, 0.3);
 }
 
 .stat-item {
@@ -178,45 +201,17 @@
 }
 
 .stat-label {
-  font-size: 14px;
-  color: #999;
+  font-size: 12px;
+  color: var(--cyber-text-dim);
   margin-bottom: 8px;
+  text-transform: uppercase;
 }
 
 .stat-value {
   font-size: 28px;
   font-weight: 700;
-  color: #f5576c;
-}
-
-/* 深色模式 */
-body.dark-mode .pomodoro-panel {
-  background: #16213e;
-}
-
-body.dark-mode .progress-ring-bg {
-  stroke: #2a2a3e;
-}
-
-body.dark-mode .time {
-  color: #eee;
-}
-
-body.dark-mode .timer-label {
-  color: #999;
-}
-
-body.dark-mode .control-btn.secondary {
-  background: #0f1419;
-  color: #999;
-}
-
-body.dark-mode .control-btn.secondary:hover {
-  background: #1e3a5f;
-}
-
-body.dark-mode .pomodoro-stats {
-  border-top-color: #2a2a3e;
+  color: var(--cyber-danger);
+  text-shadow: 0 0 10px var(--cyber-danger);
 }
 
 @media (max-width: 768px) {
@@ -238,23 +233,14 @@ body.dark-mode .pomodoro-stats {
   .time {
     font-size: 48px;
   }
-  
-  .control-btn {
-    padding: 12px 24px;
-    font-size: 14px;
-  }
 }
 
-/* 添加渐变定义 */
 @keyframes pulse {
-  0%, 100% {
-    opacity: 1;
-  }
-  50% {
-    opacity: 0.8;
-  }
+  0%, 100% { opacity: 1; box-shadow: 0 0 30px rgba(255, 0, 60, 0.1); }
+  50% { opacity: 0.8; box-shadow: 0 0 50px rgba(255, 0, 60, 0.3); }
 }
 
 .timer-display.active {
   animation: pulse 2s infinite;
+  border: 1px solid rgba(255, 0, 60, 0.3);
 }
