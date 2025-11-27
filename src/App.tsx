@@ -13,21 +13,29 @@ import { PomodoroTimer } from './components/PomodoroTimer';
 import { ParticleBackground } from './components/ParticleBackground';
 import { GameLayout } from './components/GameLayout';
 import { PlayerProfile } from './components/PlayerProfile';
+import { AbilityRadar } from './components/AbilityRadar';
+import { ActivityHeatmap } from './components/ActivityHeatmap';
+import { SoundScapes } from './components/SoundScapes';
 import { PomodoroWidget } from './components/PomodoroWidget';
+import { SubscriptionModal } from './components/SubscriptionModal';
 import { CalendarEvent } from './types';
+import { StorageService } from './services/StorageService';
+import { SubscriptionService } from './services/SubscriptionService';
 import './App.css';
 
 function App() {
   // 核心状态
+  const [events, setEvents] = useState<CalendarEvent[]>([]); // 用于全局统计，特别是雷达图
   const [selectedEvent, setSelectedEvent] = useState<CalendarEvent | null>(null);
   const [newEventDates, setNewEventDates] = useState<{ start: Date; end: Date } | null>(null);
   const [selectedTag, setSelectedTag] = useState('all');
   const [refreshTrigger, setRefreshTrigger] = useState(0);
   
-  // 玩家状态 (游戏化核心)
-  const [playerLevel, setPlayerLevel] = useState(1);
-  const [playerXp, setPlayerXp] = useState(450);
-  const [focusTime, setFocusTime] = useState(1250); // 分钟
+  // 玩家状态 (游戏化核心) - 优先从本地存储读取
+  const [playerLevel, setPlayerLevel] = useState(() => parseInt(localStorage.getItem('player_level') || '1'));
+  const [playerXp, setPlayerXp] = useState(() => parseInt(localStorage.getItem('player_xp') || '0'));
+  const [achievements, setAchievements] = useState<string[]>([]);
+  const [focusTime, setFocusTime] = useState(1250); // 这里也可以持久化
   const nextLevelXp = playerLevel * 1000;
 
   // UI 开关
@@ -37,6 +45,7 @@ function App() {
   const [showShortcuts, setShowShortcuts] = useState(false);
   const [showPomodoroFull, setShowPomodoroFull] = useState(false);
   const [showParticles, setShowParticles] = useState(true); // 默认开启
+  const [showSubscription, setShowSubscription] = useState(false);
   const [isDarkMode, setIsDarkMode] = useState(true); // 默认开启
 
   // 初始化
@@ -44,6 +53,56 @@ function App() {
     document.body.classList.add('dark-mode');
     if (showParticles) document.body.classList.add('particles-active');
   }, []);
+
+  // 加载全局事件数据（用于雷达图等统计），并初始化 XP (如果还没初始化过)
+  useEffect(() => {
+    const loadAllData = async () => {
+      const local = await StorageService.getAllEvents();
+      const subs = await SubscriptionService.fetchAllSubscribedEvents();
+      const all = [...local, ...subs];
+      setEvents(all);
+
+      // 简单的成就计算
+      const newBadges: string[] = [];
+      if (all.length >= 5) newBadges.push('初出茅庐');
+      if (all.length >= 20) newBadges.push('任务狂');
+      if (all.length >= 50) newBadges.push('战术大师');
+      setAchievements(newBadges);
+
+      // 如果是新用户(XP为0)且有历史数据，根据历史数据计算初始 XP
+      const currentXp = parseInt(localStorage.getItem('player_xp') || '0');
+      if (currentXp === 0 && local.length > 0) {
+        const initialXp = local.length * 50;
+        setPlayerXp(initialXp);
+        // 简单估算等级
+        const estLevel = Math.floor(initialXp / 1000) + 1;
+        setPlayerLevel(estLevel);
+        localStorage.setItem('player_xp', initialXp.toString());
+        localStorage.setItem('player_level', estLevel.toString());
+      }
+    };
+    loadAllData();
+  }, [refreshTrigger]);
+
+  // 增加经验值
+  const addXp = (amount: number) => {
+    setPlayerXp(prev => {
+      const newXp = prev + amount;
+      let currentLevel = playerLevel;
+      let currentNextXp = currentLevel * 1000;
+      
+      // 升级逻辑
+      if (newXp >= currentNextXp) {
+        currentLevel += 1;
+        setPlayerLevel(currentLevel);
+        localStorage.setItem('player_level', currentLevel.toString());
+        alert(`🎉 恭喜升级！当前等级: Lv.${currentLevel}`);
+      }
+      
+      localStorage.setItem('player_xp', newXp.toString());
+      return newXp;
+    });
+  };
 
   // 快捷键
   useEffect(() => {
@@ -63,6 +122,7 @@ function App() {
           setShowFocus(false);
           setShowShortcuts(false);
           setShowPomodoroFull(false);
+          setShowSubscription(false);
           if (selectedEvent || newEventDates) handleCloseEditor();
           break;
       }
@@ -100,17 +160,6 @@ function App() {
     setNewEventDates({ start, end });
   };
 
-  const addXp = (amount: number) => {
-    setPlayerXp(prev => {
-      const newXp = prev + amount;
-      if (newXp >= nextLevelXp) {
-        setPlayerLevel(l => l + 1);
-        return newXp - nextLevelXp;
-      }
-      return newXp;
-    });
-  };
-
   // 组件组装
   const LeftPanel = (
     <>
@@ -119,8 +168,12 @@ function App() {
         xp={playerXp} 
         nextLevelXp={nextLevelXp} 
         focusTime={focusTime} 
+        achievements={achievements}
       />
-      <div className="cyber-card" style={{ padding: '15px' }}>
+      <AbilityRadar events={events} />
+      <ActivityHeatmap events={events} />
+      
+      <div className="cyber-card" style={{ padding: '15px', marginTop: '20px' }}>
         <h4 style={{ color: 'var(--cyber-primary)', marginTop: 0 }}>🏷️ 任务过滤</h4>
         <TagFilter selectedTag={selectedTag} onTagChange={setSelectedTag} />
       </div>
@@ -147,8 +200,9 @@ function App() {
   const RightPanel = (
     <>
       <PomodoroWidget onFullMode={() => setShowPomodoroFull(true)} />
+      <SoundScapes />
       
-      <div className="cyber-card" style={{ padding: '15px', marginBottom: '20px' }}>
+      <div className="cyber-card" style={{ padding: '15px', marginBottom: '20px', marginTop: '20px' }}>
         <h4 style={{ color: 'var(--cyber-accent)', marginTop: 0, display: 'flex', justifyContent: 'space-between' }}>
           <span>⚠️ 高危任务警告</span>
           <span style={{ fontSize: '10px' }}>DEADLINE</span>
@@ -166,6 +220,8 @@ function App() {
         <button className="cyber-btn-block" onClick={handleQuickAdd}>⚡ 新建任务</button>
         <div style={{ height: '10px' }}></div>
         <button className="cyber-btn-block" onClick={() => setShowFocus(true)}>🎯 专注模式</button>
+        <div style={{ height: '10px' }}></div>
+        <button className="cyber-btn-block" onClick={() => setShowSubscription(true)}>📡 订阅日历</button>
         <div style={{ height: '10px' }}></div>
         <button className="cyber-btn-block" onClick={() => setShowParticles(!showParticles)}>
           {showParticles ? '🚫 关闭特效' : '✨ 开启特效'}
@@ -204,6 +260,7 @@ function App() {
 
       {showSettings && <Settings onClose={() => setShowSettings(false)} onRefresh={handleRefresh} />}
       {showStats && <StatsPanel onClose={() => setShowStats(false)} />}
+      {showSubscription && <SubscriptionModal isOpen={showSubscription} onClose={() => setShowSubscription(false)} onUpdate={handleRefresh} />}
       <TodayFocus isOpen={showFocus} onClose={() => setShowFocus(false)} onEventClick={handleSelectEvent} />
       <ShortcutHelp isOpen={showShortcuts} onClose={() => setShowShortcuts(false)} />
       <PomodoroTimer isOpen={showPomodoroFull} onClose={() => setShowPomodoroFull(false)} />

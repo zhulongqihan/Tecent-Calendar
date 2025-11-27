@@ -1,0 +1,67 @@
+.activity-heatmap {
+  padding: 15px;
+  margin-bottom: 20px;
+  background: rgba(10, 10, 20, 0.8);
+}
+
+.heatmap-title {
+  margin: 0 0 10px 0;
+  color: var(--cyber-text-dim);
+  font-size: 12px;
+  text-transform: uppercase;
+}
+
+.heatmap-grid {
+  display: flex;
+  gap: 3px;
+  /* 确保不超出容器 */
+  overflow-x: auto;
+  padding-bottom: 5px;
+}
+
+/* 隐藏滚动条 */
+.heatmap-grid::-webkit-scrollbar {
+  display: none;
+}
+
+.heatmap-col {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.heatmap-cell {
+  width: 10px;
+  height: 10px;
+  border-radius: 1px;
+  transition: all 0.2s ease;
+}
+
+.heatmap-cell:hover {
+  transform: scale(1.5);
+  z-index: 10;
+  border: 1px solid white;
+}
+
+/* 颜色等级 - 赛博青色系 */
+.level-0 { background-color: rgba(255, 255, 255, 0.05); }
+.level-1 { background-color: rgba(0, 243, 255, 0.2); }
+.level-2 { background-color: rgba(0, 243, 255, 0.4); }
+.level-3 { background-color: rgba(0, 243, 255, 0.7); }
+.level-4 { background-color: #00f3ff; box-shadow: 0 0 5px #00f3ff; }
+
+.heatmap-legend {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 4px;
+  margin-top: 8px;
+  font-size: 10px;
+  color: var(--cyber-text-dim);
+}
+
+.heatmap-legend div {
+  width: 10px;
+  height: 10px;
+  border-radius: 1px;
+}

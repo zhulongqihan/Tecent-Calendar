@@ -5,6 +5,7 @@ import 'moment/locale/zh-cn';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 import { CalendarEvent, ViewType } from '../types';
 import { StorageService } from '../services/StorageService';
+import { SubscriptionService } from '../services/SubscriptionService';
 import { LunarUtils } from '../utils/lunarUtils';
 import './CalendarView.css';
 
@@ -32,8 +33,17 @@ export const CalendarView: React.FC<CalendarViewProps> = ({
 
   // 加载事件
   const loadEvents = useCallback(async () => {
-    const loadedEvents = await StorageService.getAllEvents();
-    setAllEvents(loadedEvents);
+    // 1. 获取本地存储的事件
+    const localEvents = await StorageService.getAllEvents();
+    
+    // 2. 获取订阅的外部事件
+    const subscribedEvents = await SubscriptionService.fetchAllSubscribedEvents();
+    
+    // 3. 合并
+    const combinedEvents = [...localEvents, ...subscribedEvents];
+    
+    console.log('Loaded events:', combinedEvents.length); // Debug
+    setAllEvents(combinedEvents);
   }, []);
 
   // 根据标签过滤事件

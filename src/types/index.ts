@@ -2,14 +2,15 @@
 export interface CalendarEvent {
   id: string;
   title: string;
-  description: string;
-  location: string;
+  description?: string;
+  location?: string;
   startDate: Date;
   endDate: Date;
-  reminderMinutes: number; // 提前多少分钟提醒
+  reminderMinutes: number;
   color?: string;
   isAllDay?: boolean;
   tags?: string[]; // 标签数组，例如: ['work', 'important']
+  isExternal?: boolean; // 是否为外部订阅事件（只读）
 }
 
 // 视图类型

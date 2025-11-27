@@ -18,10 +18,29 @@
 .avatar-img {
   width: 100%;
   height: 100%;
-  border-radius: 50%;
-  border: 2px solid var(--cyber-primary);
-  box-shadow: 0 0 15px var(--cyber-primary);
+  /* 改为六边形 */
+  clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+  background: rgba(0, 243, 255, 0.1);
+  border: none;
   object-fit: cover;
+}
+
+/* 外框也加一个六边形边框效果，需要用伪元素实现，或者简化处理 */
+.avatar-container::after {
+  content: '';
+  position: absolute;
+  top: -5px; left: -5px; right: -5px; bottom: -5px;
+  background: var(--cyber-primary);
+  clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+  z-index: -1;
+  opacity: 0.5;
+  animation: pulseAvatar 2s infinite;
+}
+
+@keyframes pulseAvatar {
+  0% { transform: scale(1); opacity: 0.5; }
+  50% { transform: scale(1.05); opacity: 0.2; }
+  100% { transform: scale(1); opacity: 0.5; }
 }
 
 .level-badge {

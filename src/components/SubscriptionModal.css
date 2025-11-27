@@ -1,0 +1,103 @@
+.sub-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(4px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 10000;
+  animation: fadeIn 0.2s ease;
+}
+
+.sub-modal {
+  background: rgba(10, 10, 20, 0.95);
+  border: 1px solid var(--cyber-primary);
+  width: 90%;
+  max-width: 500px;
+  max-height: 80vh;
+  overflow-y: auto;
+  box-shadow: var(--cyber-glow-strong);
+  position: relative;
+}
+
+.sub-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px;
+  border-bottom: 1px solid var(--cyber-primary);
+  background: rgba(0, 243, 255, 0.1);
+}
+
+.sub-header h3 {
+  margin: 0;
+  color: var(--cyber-primary);
+  font-size: 18px;
+}
+
+.sub-content {
+  padding: 20px;
+}
+
+.add-sub-form {
+  padding: 15px;
+  margin-bottom: 20px;
+}
+
+.add-sub-form h4, .sub-list h4 {
+  margin-top: 0;
+  color: var(--cyber-text-dim);
+  font-size: 12px;
+}
+
+.sub-item {
+  padding: 15px;
+  margin-bottom: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-left: 4px solid;
+}
+
+.sub-info {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.sub-name {
+  font-weight: bold;
+  font-size: 16px;
+}
+
+.sub-url {
+  font-size: 12px;
+  color: var(--cyber-text-dim);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 200px;
+}
+
+.delete-btn {
+  border-color: var(--cyber-danger);
+  color: var(--cyber-danger);
+  padding: 4px 12px;
+  font-size: 12px;
+}
+
+.delete-btn:hover {
+  background: var(--cyber-danger);
+  color: white;
+}
+
+.empty-state {
+  text-align: center;
+  color: var(--cyber-text-dim);
+  padding: 20px;
+  font-style: italic;
+}

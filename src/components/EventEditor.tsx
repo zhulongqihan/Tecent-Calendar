@@ -37,8 +37,8 @@ export const EventEditor: React.FC<EventEditorProps> = ({
       // 编辑模式
       setFormData({
         title: event.title,
-        description: event.description,
-        location: event.location,
+        description: event.description || '',
+        location: event.location || '',
         startDate: formatDateForInput(event.startDate),
         startTime: formatTimeForInput(event.startDate),
         endDate: formatDateForInput(event.endDate),
