@@ -18,6 +18,11 @@ import { ActivityHeatmap } from './components/ActivityHeatmap';
 import { SoundScapes } from './components/SoundScapes';
 import { PomodoroWidget } from './components/PomodoroWidget';
 import { SubscriptionModal } from './components/SubscriptionModal';
+import { DeadlineAlert } from './components/DeadlineAlert';
+import { CyberClock } from './components/CyberClock';
+import { DailyBriefing } from './components/DailyBriefing';
+import { ClickExplosion } from './components/ClickExplosion';
+import { TacticalDashboard } from './components/TacticalDashboard';
 import { CalendarEvent } from './types';
 import { StorageService } from './services/StorageService';
 import { SubscriptionService } from './services/SubscriptionService';
@@ -36,6 +41,8 @@ function App() {
   const [playerXp, setPlayerXp] = useState(() => parseInt(localStorage.getItem('player_xp') || '0'));
   const [achievements, setAchievements] = useState<string[]>([]);
   const [focusTime, setFocusTime] = useState(1250); // 这里也可以持久化
+  const [totalTasks, setTotalTasks] = useState(0);
+  const [streakDays, setStreakDays] = useState(0);
   const nextLevelXp = playerLevel * 1000;
 
   // UI 开关
@@ -47,12 +54,67 @@ function App() {
   const [showParticles, setShowParticles] = useState(true); // 默认开启
   const [showSubscription, setShowSubscription] = useState(false);
   const [isDarkMode, setIsDarkMode] = useState(true); // 默认开启
+  const [showBriefing, setShowBriefing] = useState(false);
+  const [showDashboard, setShowDashboard] = useState(false);
 
   // 初始化
   useEffect(() => {
     document.body.classList.add('dark-mode');
     if (showParticles) document.body.classList.add('particles-active');
+
+    const lastDate = localStorage.getItem('last_briefing_date');
+    const today = new Date().toDateString();
+    if (lastDate !== today) {
+      setShowBriefing(true);
+    }
   }, []);
+
+  // I. 生物节律逻辑 (每分钟检查)
+  useEffect(() => {
+    const checkBiorhythm = () => {
+      const hour = new Date().getHours();
+      // 18:00 - 06:00 为夜间战术模式
+      if (hour >= 18 || hour < 6) {
+        document.body.classList.add('biorhythm-night');
+      } else {
+        document.body.classList.remove('biorhythm-night');
+      }
+    };
+    
+    checkBiorhythm(); // 初始检查
+    const interval = setInterval(checkBiorhythm, 60000);
+    return () => clearInterval(interval);
+  }, []);
+
+  // J. 战术大屏 (屏保) 逻辑
+  useEffect(() => {
+    let idleTimer: NodeJS.Timeout;
+    
+    const resetIdleTimer = () => {
+      if (showDashboard) {
+        setShowDashboard(false);
+      }
+      clearTimeout(idleTimer);
+      // 30秒无操作进入屏保 (演示用)
+      idleTimer = setTimeout(() => {
+        setShowDashboard(true);
+      }, 30000);
+    };
+
+    window.addEventListener('mousemove', resetIdleTimer);
+    window.addEventListener('keydown', resetIdleTimer);
+    window.addEventListener('click', resetIdleTimer);
+
+    // 初始化启动计时器
+    resetIdleTimer();
+
+    return () => {
+      window.removeEventListener('mousemove', resetIdleTimer);
+      window.removeEventListener('keydown', resetIdleTimer);
+      window.removeEventListener('click', resetIdleTimer);
+      clearTimeout(idleTimer);
+    };
+  }, [showDashboard]);
 
   // 加载全局事件数据（用于雷达图等统计），并初始化 XP (如果还没初始化过)
   useEffect(() => {
@@ -61,6 +123,31 @@ function App() {
       const subs = await SubscriptionService.fetchAllSubscribedEvents();
       const all = [...local, ...subs];
       setEvents(all);
+
+      // 统计数据
+      setTotalTasks(all.length);
+
+      // 计算 Streak (连续打卡天数)
+      const dates = new Set(all.map(e => new Date(e.endDate).toDateString()));
+      let streak = 0;
+      let checkDate = new Date();
+      // 检查最近365天
+      for(let i=0; i<365; i++) {
+        if (dates.has(checkDate.toDateString())) {
+          streak++;
+        } else if (i > 0) { 
+           if (i === 1 && streak === 0) {
+             break;
+           } else if (i > 1) {
+             break;
+           }
+        }
+        checkDate.setDate(checkDate.getDate() - 1);
+      }
+      setStreakDays(streak);
+
+      // 估算专注时长 (假设每个任务25分钟)
+      setFocusTime(all.length * 25);
 
       // 简单的成就计算
       const newBadges: string[] = [];
@@ -152,6 +239,11 @@ function App() {
     addXp(50);
   };
   const handleRefresh = () => setRefreshTrigger(prev => prev + 1);
+  const handleCloseBriefing = () => {
+    const today = new Date().toDateString();
+    localStorage.setItem('last_briefing_date', today);
+    setShowBriefing(false);
+  };
   
   const handleQuickAdd = () => {
     const now = new Date();
@@ -169,6 +261,8 @@ function App() {
         nextLevelXp={nextLevelXp} 
         focusTime={focusTime} 
         achievements={achievements}
+        totalTasks={totalTasks}
+        streakDays={streakDays}
       />
       <AbilityRadar events={events} />
       <ActivityHeatmap events={events} />
@@ -201,19 +295,7 @@ function App() {
     <>
       <PomodoroWidget onFullMode={() => setShowPomodoroFull(true)} />
       <SoundScapes />
-      
-      <div className="cyber-card" style={{ padding: '15px', marginBottom: '20px', marginTop: '20px' }}>
-        <h4 style={{ color: 'var(--cyber-accent)', marginTop: 0, display: 'flex', justifyContent: 'space-between' }}>
-          <span>⚠️ 高危任务警告</span>
-          <span style={{ fontSize: '10px' }}>DEADLINE</span>
-        </h4>
-        <div style={{ fontSize: '20px', fontFamily: 'monospace', fontWeight: 'bold', color: 'white' }}>
-          期末系统架构设计
-        </div>
-        <div style={{ color: 'var(--cyber-danger)', fontSize: '14px', marginTop: '5px' }}>
-          剩余时间: 2 天
-        </div>
-      </div>
+      <DeadlineAlert events={events} />
 
       <div className="cyber-card" style={{ padding: '15px' }}>
         <h4 style={{ color: 'var(--cyber-secondary)', marginTop: 0 }}>🚀 快速指令</h4>
@@ -232,12 +314,14 @@ function App() {
 
   return (
     <div className="App">
+      <ClickExplosion />
+      {showDashboard && <TacticalDashboard onUnlock={() => setShowDashboard(false)} />}
+      {showBriefing && <DailyBriefing events={events} onClose={handleCloseBriefing} />}
+
       <header className="app-header">
         <h1>🛡️ 人生重构系统 <span style={{ fontSize: '12px', marginLeft: '10px', opacity: 0.7 }}>LIFE OS v2.0</span></h1>
         <div className="header-actions">
-          <div style={{ fontSize: '12px', color: 'var(--cyber-primary)' }}>
-            系统状态: 在线
-          </div>
+          <CyberClock />
         </div>
       </header>
 

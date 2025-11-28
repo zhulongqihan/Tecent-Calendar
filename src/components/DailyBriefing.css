@@ -1,0 +1,88 @@
+.daily-briefing {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: #000;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Courier New', monospace;
+  color: var(--cyber-primary);
+  transition: opacity 0.8s ease;
+}
+
+.daily-briefing.closing {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.briefing-content {
+  width: 600px;
+  max-width: 90%;
+}
+
+.briefing-header {
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 20px;
+  border-bottom: 2px solid var(--cyber-primary);
+  padding-bottom: 10px;
+  position: relative;
+  overflow: hidden;
+}
+
+.scan-line {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: rgba(255, 255, 255, 0.5);
+  animation: scan 2s infinite linear;
+  box-shadow: 0 0 10px var(--cyber-primary);
+}
+
+@keyframes scan {
+  0% { top: 0; }
+  100% { top: 100%; }
+}
+
+.briefing-text {
+  font-size: 16px;
+  line-height: 1.8;
+  white-space: pre-wrap;
+  min-height: 200px;
+  text-shadow: 0 0 5px var(--cyber-primary);
+}
+
+.cursor {
+  animation: blink 1s infinite;
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+.briefing-btn {
+  margin-top: 30px;
+  background: transparent;
+  border: 1px solid var(--cyber-primary);
+  color: var(--cyber-primary);
+  padding: 15px 40px;
+  font-size: 18px;
+  font-family: inherit;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  animation: fadeIn 0.5s ease;
+  width: 100%;
+}
+
+.briefing-btn:hover {
+  background: var(--cyber-primary);
+  color: #000;
+  box-shadow: 0 0 20px var(--cyber-primary);
+}

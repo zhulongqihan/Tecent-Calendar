@@ -102,3 +102,26 @@
     justify-content: center;
   }
 }
+
+/* I. 生物节律：夜间战术模式 (18:00 - 06:00) */
+body.biorhythm-night {
+  /* 主色调改为琥珀橙/深红 */
+  --cyber-primary: #ff9d00; 
+  --cyber-secondary: #ff0055;
+  --cyber-accent: #00ffaa; /* 保持一个冷色调作为对比 */
+  --cyber-glow: 0 0 10px rgba(255, 157, 0, 0.6);
+  
+  /* 背景微调，更加深邃 */
+  background-color: #050202;
+}
+
+body.biorhythm-night .rbc-today {
+  background-color: rgba(255, 157, 0, 0.1) !important;
+}
+
+/* 夜间模式下的网格颜色微调 */
+body.biorhythm-night .calendar-container::before {
+  background-image: 
+    linear-gradient(rgba(255, 60, 0, 0.2) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 60, 0, 0.2) 1px, transparent 1px) !important;
+}

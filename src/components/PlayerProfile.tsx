@@ -7,9 +7,13 @@ interface PlayerProfileProps {
   nextLevelXp: number;
   focusTime: number; // 总专注时长（分钟）
   achievements?: string[]; // 成就列表
+  totalTasks: number; // 真实任务数
+  streakDays: number; // 连续打卡天数
 }
 
-export const PlayerProfile: React.FC<PlayerProfileProps> = ({ level, xp, nextLevelXp, focusTime, achievements = [] }) => {
+export const PlayerProfile: React.FC<PlayerProfileProps> = ({ 
+  level, xp, nextLevelXp, focusTime, achievements = [], totalTasks, streakDays 
+}) => {
   const progressPercent = Math.min(100, (xp / nextLevelXp) * 100);
 
   return (
@@ -58,11 +62,11 @@ export const PlayerProfile: React.FC<PlayerProfileProps> = ({ level, xp, nextLev
         </div>
         <div className="stat-box">
           <div className="stat-label">任务完成</div>
-          <div className="stat-value">12</div>
+          <div className="stat-value">{totalTasks}</div>
         </div>
         <div className="stat-box">
           <div className="stat-label">连续打卡</div>
-          <div className="stat-value">5天</div>
+          <div className="stat-value">{streakDays}天</div>
         </div>
       </div>
     </div>
